@@ -178,9 +178,8 @@ def main(sysargv=None):
         ], exit_on_error=False)
         if ret_build != 0:
             from .util import warn
-            from remote_pdb import set_trace
             warn("Starting remote Python debugger...")
-            set_trace()
+            job.run(['ipython.exe', 'notebook'])
         # Run tests
         ret_test = job.run([
             job.python, '-u', ament_py, 'test',
