@@ -170,12 +170,17 @@ def main(sysargv=None):
             '.', args.sourcespace, 'ament', 'ament_tools', 'scripts', 'ament.py'
         )
         # Now run ament build
-        job.run([
+        ret_build = job.run([
             job.python, '-u', ament_py, 'build', '--build-tests',
             '--build-space', '"%s"' % args.buildspace,
             '--install-space', '"%s"' % args.installspace,
             '"%s"' % args.sourcespace
-        ])
+        ], exit_on_error=False)
+        if ret_build != 0:
+            from .util import warn
+            from remote_pdb import set_trace
+            warn("Starting remote Python debugger...")
+            set_trace()
         # Run tests
         ret_test = job.run([
             job.python, '-u', ament_py, 'test',
