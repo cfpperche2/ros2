@@ -92,9 +92,12 @@ def build_and_package(args, job):
         archive_path = 'ros2-package-windows.zip'
         # NOTE(esteve): hack to copy our custom built VS2015-compatible OpenCV DLLs
         opencv_libdir = os.path.join('c:/', 'opencv', 'build', 'x64', 'vc14', 'bin')
-        for libfile in ['opencv_core2412.dll', 'opencv_highgui2412.dll']:
-            libpath = os.path.join(opencv_libdir, libfile)
-            shutil.copy(libpath, os.path.join(args.installspace, 'bin', libfile))
+        for libfile in ['opencv_core%d.dll', 'opencv_highgui%d.dll']:
+            origin_libpath = os.path.join(opencv_libdir, libfile % 2412)
+            destination_libpath2411 = os.path.join(args.installspace, 'bin', libfile % 2411)
+            destination_libpath2412 = os.path.join(args.installspace, 'bin', libfile % 2412)
+            shutil.copy(origin_libpath, destination_libpath2411)
+            shutil.copy(origin_libpath, destination_libpath2412)
         with zipfile.ZipFile(archive_path, 'w') as zf:
             for dirname, subdirs, files in os.walk(args.installspace):
                 arcname = os.path.join(
