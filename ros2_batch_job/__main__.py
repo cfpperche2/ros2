@@ -104,7 +104,7 @@ def build_and_test(args, job):
         '--build-space', '"%s"' % args.buildspace,
         '--install-space', '"%s"' % args.installspace,
         '"%s"' % args.sourcespace
-    ] + (['--isolated'] if args.isolated else []), shell=True)
+    ] + (['--isolated'] if args.isolated else []) + ['--cmake-args', '-DRPCPROTO=rpcdds'], shell=True)
     # Run tests
     ret_test = job.run([
         '"%s"' % job.python, '-u', ament_py, 'test',
