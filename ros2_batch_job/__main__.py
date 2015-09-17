@@ -105,6 +105,13 @@ def build_and_test(args, job):
         '--install-space', '"%s"' % args.installspace,
         '"%s"' % args.sourcespace
     ] + (['--isolated'] if args.isolated else []), shell=True)
+    # Now run ament build a second time
+    job.run([
+        '"%s"' % job.python, '-u', ament_py, 'build', '--build-tests',
+        '--build-space', '"%s"' % args.buildspace,
+        '--install-space', '"%s"' % args.installspace,
+        '"%s"' % args.sourcespace
+    ] + (['--isolated'] if args.isolated else []), shell=True)
     # Run tests
     ret_test = job.run([
         '"%s"' % job.python, '-u', ament_py, 'test',
